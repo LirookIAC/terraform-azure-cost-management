@@ -51,18 +51,16 @@ variable "time_period" {
 
   validation {
     condition = (
-      # Check that the start_date is in the format YYYY-MM-01
       can(regex("^\\d{4}-\\d{2}-01$", var.time_period.start_date)) &&
-      # Convert start_date to a timestamp and check that it is on or after June 1, 2017
-      timeparse(var.time_period.start_date) >= timeparse("2017-06-01") &&
-      # Convert start_date to a timestamp and check that it is not more than 12 months in the future
-      timeparse(var.time_period.start_date) <= timeadd(timestamp(), "8760h") &&
-      # If end_date is provided, it must be greater than start_date
-      (var.time_period.end_date == "" || timeparse(var.time_period.end_date) > timeparse(var.time_period.start_date))
+      var.time_period.start_date >= "2017-06-01" &&
+      var.time_period.start_date <= formatdate("YYYY-MM-DD", timeadd(timestamp(), "8760h")) &&
+
+      (var.time_period.end_date == "" || var.time_period.end_date > var.time_period.start_date)
     )
     error_message = "The start_date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future. The end_date, if provided, must be later than the start_date."
   }
 }
+
 variable "notifications" {
   description = "A map of notifications, each with its own set of parameters."
   type = map(object({
