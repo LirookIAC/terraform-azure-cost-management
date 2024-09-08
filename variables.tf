@@ -69,7 +69,7 @@ variable "time_period" {
 
 variable "notifications" {
   description = "A map of notifications, each with its own set of parameters."
-  type = map(object({
+  type = list(object({
     operator        = string
     threshold       = number
     threshold_type  = optional(string, "Actual")
