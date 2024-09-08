@@ -42,7 +42,7 @@ variable "time_grain" {
 }
 
 variable "time_period" {
-  description = "The time period for the budget, including start_date and end_date. The start date must be the first of the month and less than the end date. The end date must be greater than the start date."
+  description = "The time period for the budget, including start_date and end_date. The start date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future."
 
   type = object({
     start_date = string
@@ -51,24 +51,20 @@ variable "time_period" {
 
   validation {
     condition = (
-      can(regex("^\\d{4}-\\d{2}-01$", var.time_period.start_date)) &&
-      (
-        can(regex("^2017-(0[6-9]|1[0-2])-01$", var.time_period.start_date)) ||
-        can(regex("^20[2-9][0-9]-(0[1-9]|1[0-2])-01$", var.time_period.start_date))
-      ) &&
-      (
-        var.time_period.end_date == "" ||
-        (
-          can(regex("^\\d{4}-\\d{2}-01$", var.time_period.end_date)) &&
-          (substr(var.time_period.end_date, 0, 7) > substr(var.time_period.start_date, 0, 7) ||
-           (substr(var.time_period.end_date, 0, 7) == substr(var.time_period.start_date, 0, 7) &&
-            substr(var.time_period.end_date, 0, 10) > substr(var.time_period.start_date, 0, 10)))
-        )
-      )
+      can(regex("^\\d{4}-\\d{2}-01T\\d{2}:\\d{2}:\\d{2}Z$", var.time_period.start_date)) &&
+      
+      # Ensure start_date is on or after June 1, 2017
+      timecmp(var.time_period.start_date, "2017-06-01T00:00:00Z") >= 0 &&
+      
+      # Ensure start_date is not more than 12 months in the future
+      timecmp(var.time_period.start_date, formatdate("YYYY-MM-DDTHH:MM:SSZ", timeadd(timestamp(), "8760h"))) <= 0 &&
+      # Ensure start_date is less than end_date if end_date is provided
+      (var.time_period.end_date == "" || timecmp(var.time_period.start_date, var.time_period.end_date) < 0)
     )
-    error_message = "The start_date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future. The end_date, if provided, must be later than the start_date."
+    error_message = "The start_date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future. The start_date must also be less than the end_date if end_date is provided."
   }
 }
+
 
 
 variable "notifications" {
