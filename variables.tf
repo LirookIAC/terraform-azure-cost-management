@@ -52,14 +52,24 @@ variable "time_period" {
   validation {
     condition = (
       can(regex("^\\d{4}-\\d{2}-01$", var.time_period.start_date)) &&
-      var.time_period.start_date >= "2017-06-01" &&
-      var.time_period.start_date <= formatdate("YYYY-MM-DD", timeadd(timestamp(), "8760h")) &&
-
-      (var.time_period.end_date == "" || var.time_period.end_date > var.time_period.start_date)
+      (
+        can(regex("^2017-(0[6-9]|1[0-2])-01$", var.time_period.start_date)) ||
+        can(regex("^20[2-9][0-9]-(0[1-9]|1[0-2])-01$", var.time_period.start_date))
+      ) &&
+      (
+        var.time_period.end_date == "" ||
+        (
+          can(regex("^\\d{4}-\\d{2}-01$", var.time_period.end_date)) &&
+          (substr(var.time_period.end_date, 0, 7) > substr(var.time_period.start_date, 0, 7) ||
+           (substr(var.time_period.end_date, 0, 7) == substr(var.time_period.start_date, 0, 7) &&
+            substr(var.time_period.end_date, 0, 10) > substr(var.time_period.start_date, 0, 10)))
+        )
+      )
     )
     error_message = "The start_date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future. The end_date, if provided, must be later than the start_date."
   }
 }
+
 
 variable "notifications" {
   description = "A map of notifications, each with its own set of parameters."
