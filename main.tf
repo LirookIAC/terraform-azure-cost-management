@@ -12,13 +12,13 @@ resource "azurerm_consumption_budget_resource_group" "example" {
   dynamic "notification" {
     for_each = var.notifications
     content {
-    operator        = each.value.operator
-    threshold       = each.value.threshold
-    threshold_type  = each.value.threshold_type
-    contact_emails  = each.value.contact_emails
-    contact_groups  = each.value.contact_groups
-    contact_roles   = each.value.contact_roles
-    enabled         = each.value.enabled
+    operator        = notification.value.operator
+    threshold       = notification.value.threshold
+    threshold_type  = notification.value.threshold_type
+    contact_emails  = notification.value.contact_emails
+    contact_groups  = notification.value.contact_groups
+    contact_roles   = notification.value.contact_roles
+    enabled         = notification.value.enabled
     }
   }
 }
