@@ -29,3 +29,5 @@ This module provides the following output:
 output "resource_group_budget_id" {
   value = azurerm_consumption_budget_resource_group.lirook.id
 }
+```
+- resource_group_budget_id: The ID of the created Azure Consumption Budget resource for the specified resource group. This section details the output variable provided by the module and its purpose.
