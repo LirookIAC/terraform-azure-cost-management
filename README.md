@@ -188,5 +188,17 @@ module "azure_cost_management" {
   ]
 }
 ```
+In this example:
+
+- **The source** specifies the location of the module.
+- **resource_group_id** is the ID of the Azure resource group.
+- **resource_group_budget_name** is the name of the budget.
+- **amount** sets the budget amount.
+- **time_period** defines the budget's start date.
+- **notifications** configure alert notifications.
+- **dimensions** filter the budget by resource dimensions.
+- **tags** filter the budget by tags.
+
+This example shows how to configure the module, including required and optional variables.
 
 
