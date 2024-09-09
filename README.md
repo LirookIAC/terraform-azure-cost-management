@@ -1,7 +1,7 @@
-# Azure Maintenance Configuration Module
+# Azure Consumption Budget Resource Group Module
 
 ## Overview
-This module creates an Azure Maintenance Configuration resource. The maintenance configuration helps manage updates and patches for your Azure VMs Guest OS.
+This module creates an Azure Consumption Budget resource for a specified resource group. It helps manage and monitor budget thresholds for Azure resources within the resource group.
 
 ## Version Constraints
 
