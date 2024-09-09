@@ -57,18 +57,20 @@ variable "time_period" {
       timecmp(var.time_period.start_date, "2017-06-01T00:00:00Z") >= 0 &&
       
       # Ensure start_date is not more than 12 months in the future
-      timecmp(var.time_period.start_date, formatdate("YYYY-MM-DDTHH:MM:SSZ", timeadd(timestamp(), "8760h"))) <= 0 &&
+      timecmp(var.time_period.start_date, timeadd(timestamp(), "8760h")) <= 0 &&
       # Ensure start_date is less than end_date if end_date is provided
-      (var.time_period.end_date == "" || timecmp(var.time_period.start_date, var.time_period.end_date) < 0)
+      (var.time_period.end_date == "" ? 
+        true : 
+        timecmp(var.time_period.start_date, var.time_period.end_date) < 0)
     )
-    error_message = "The start_date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future. The start_date must also be less than the end_date if end_date is provided."
+    error_message = "The start_date must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future. The start_date must also be less than the end_date if end_date is provided. Furthermore, the dates should be in ISO 8601 format. Example : 2022-06-01T00:00:00Z. Id end_date is not set the end_date defaults to approximately 10 years form start date.  "
   }
 }
 
 
 
 variable "notifications" {
-  description = "A map of notifications, each with its own set of parameters."
+  description = "A list of notifications, each with its own set of parameters."
   type = list(object({
     operator        = string
     threshold       = number
@@ -81,7 +83,7 @@ variable "notifications" {
 
   validation {
     condition = alltrue([
-      for n in values(var.notifications) : (
+      for n in var.notifications : (
         n.operator == "EqualTo" || n.operator == "GreaterThan" || n.operator == "GreaterThanOrEqualTo"
       )
     ])
@@ -90,19 +92,86 @@ variable "notifications" {
 
   validation {
     condition = alltrue([
-      for n in values(var.notifications) : (
+      for n in var.notifications : (
         n.threshold >= 0 && n.threshold <= 1000
       )
     ])
     error_message = "The threshold value must be between 0 and 1000."
   }
+
   validation {
     condition = alltrue([
-      for n in values(var.notifications) : (
+      for n in var.notifications : (
         n.threshold_type == "Actual" || n.threshold_type == "Forecasted"
       )
     ])
     error_message = "The threshold_type must be one of 'Actual' or 'Forecasted'."
   }
+
+  validation {
+    condition = alltrue([
+      for n in var.notifications : (
+        length(n.contact_emails) > 0 || length(n.contact_groups) > 0 || length(n.contact_roles) > 0
+      )
+    ])
+    error_message = "At least one of contact_emails, contact_groups, or contact_roles must be provided."
+  }
 }
+
+variable "dimensions" {
+  description = "A list of dimension filters to apply to the budget."
+
+  type = list(object({
+    name     = string
+    operator = optional(string, "In")  # Default value is "In"
+    values   = list(string)
+  }))
+  default = [ {
+    name = "ResourceId",
+    values = ["unused_default_value"]
+  } ]
+  validation {
+    condition = alltrue([
+      for d in var.dimensions : (
+        contains (["ChargeType", "Frequency", "InvoiceId", "Meter", "MeterCategory", "MeterSubCategory", "PartNumber", "PricingModel", "Product", "ProductOrderId", "ProductOrderName", "PublisherType", "ReservationId", "ReservationName", "ResourceGroupName", "ResourceGuid", "ResourceId", "ResourceLocation", "ResourceType", "ServiceFamily", "ServiceName", "SubscriptionID", "SubscriptionName", "UnitOfMeasure"],d.name)
+      )
+    ])
+    error_message = "Each dimension's name must be one of the allowed values: ChargeType, Frequency, InvoiceId, Meter, MeterCategory, MeterSubCategory, PartNumber, PricingModel, Product, ProductOrderId, ProductOrderName, PublisherType, ReservationId, ReservationName, ResourceGroupName, ResourceGuid, ResourceId, ResourceLocation, ResourceType, ServiceFamily, ServiceName, SubscriptionID, SubscriptionName, UnitOfMeasure."
+  }
+
+  validation {
+    condition = alltrue([
+      for d in var.dimensions : (
+        length(d.values) > 0
+      )
+    ])
+    error_message = "Each dimension must specify at least one value in the values list."
+  }
+}
+
+variable "tags" {
+  description = "A list of tag filters to apply to the budget."
+
+  type = list(object({
+    name   = string
+    values = list(string)
+  }))
+  default = [ {
+    name = "unused_default_value",
+    values = ["unused_default_value"]
+  } ]
+
+  validation {
+    condition = alltrue([
+      for t in var.tags : (
+        length(t.values) > 0
+      )
+    ])
+    error_message = "Each tag filter must specify at least one value in the values list."
+  }
+}
+
+
+
+
 
