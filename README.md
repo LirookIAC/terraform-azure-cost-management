@@ -18,3 +18,14 @@ terraform {
   }
 }
 ```
+- Terraform: Tested with version 1.7.5  
+- AzureRM Provider: Tested with version 3.116.0
+
+## Outputs
+
+This module provides the following output:
+
+```hcl
+output "resource_group_budget_id" {
+  value = azurerm_consumption_budget_resource_group.lirook.id
+}
