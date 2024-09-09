@@ -135,6 +135,27 @@ To use this module, follow these steps:
   - **Validation**:
     - **Values**: Each tag filter must specify at least one value in the `values` list.
 
+## Considerations
+
+1. **Role Requirements:**
+   - To deploy a budget in a resource group, you must have the **Cost Management Contributor** role or a higher role, such as **Contributor**. This role is necessary to create and manage budgets within the resource group.
+
+2. **Dimension and Filter Logic:**
+   - The dimensions and filters specified in the budget are applied using an "AND" operation. This means that a resource must satisfy all specified dimension and tag criteria to be included in the budget scope.
+
+3. **Time Period Constraints:**
+   - The `start_date` for the budget must be the first of the month and within a range from June 1, 2017, to no more than 12 months in the future. If an `end_date` is provided, it must be later than the `start_date`.
+
+4. **Notification Settings:**
+   - Ensure that notification settings are properly configured with valid email addresses , roles and/or action groups. Notifications are only sent when the specified budget threshold is crossed, based on the defined operator (e.g., `GreaterThan`).
+
+5. **Resource Scope:**
+   - The `dimensions` and `tags` parameters can significantly impact the budget scope. Be mindful of the filters applied to ensure they accurately reflect the intended scope of your budget.
+
+6. **Default Values:**
+   - Default values for dimensions and tags are just placeholders to pass validations. If no dimensions and tag bloks ae declared, no filters are applied.
+
+
 ## Example Usage
 
 Below is an example of how to use the `azure-cost-management` module:
