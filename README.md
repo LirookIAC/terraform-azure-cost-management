@@ -157,7 +157,7 @@ module "azure_cost_management" {
   source = "git::https://github.com/LirookIAC/terraform-azure-cost-management.git"
   
   # Required Variables
-  resource_group_id          = "/subscriptions/bed9c8b2-bb60-492d-92a9-d1641fb7adf8/resourceGroups/azureInfra"
+  resource_group_id          = "/subscriptions/abcd9c8b2-bb60-492d-92a9-d1641fb7adf8/resourceGroups/azureInfra"
   resource_group_budget_name = "azureInfra-budget"
   amount                     = 100
   time_period = {
@@ -176,7 +176,7 @@ module "azure_cost_management" {
   dimensions = [
     {
       name   = "ResourceId"
-      values = ["/subscriptions/bed9c8b2-bb60-492d-92a9-d1641fb7adf8/resourceGroups/azureInfra/providers/Microsoft.RecoveryServices/vaults/lirrokVault"]
+      values = ["/subscriptions/abcd9c8b2-bb60-492d-92a9-d1641fb7adf8/resourceGroups/azureInfra/providers/Microsoft.RecoveryServices/vaults/lirrokVault"]
     }
   ]
 
