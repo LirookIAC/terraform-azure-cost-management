@@ -84,3 +84,20 @@ To use this module, follow these steps:
     - If `end_date` is provided, it must be greater than the `start_date`.
     - If `end_date` is not set, the default end date is approximately 10 years from the `start_date`.
 
+- **`notifications`**
+  - **Description**: A list of notifications, each with its own set of parameters.
+  - **Type**: `list(object({
+      operator        = string
+      threshold       = number
+      threshold_type  = optional(string, "Actual")
+      contact_emails  = optional(list(string), [])
+      contact_groups  = optional(list(string), [])
+      contact_roles   = optional(list(string), [])
+      enabled         = optional(bool, true)
+    }))`
+  - **Validation**:
+    - **Operator**: Must be one of `EqualTo`, `GreaterThan`, or `GreaterThanOrEqualTo`.
+    - **Threshold**: Must be between `0` and `1000`.
+    - **Threshold Type**: Must be one of `Actual` or `Forecasted`.
+    - **Contact Details**: At least one of `contact_emails`, `contact_groups`, or `contact_roles` must be provided.
+
