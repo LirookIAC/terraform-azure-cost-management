@@ -65,32 +65,22 @@ To use this module, follow these steps:
      - Type: `number`
      - Validation: Must be greater than 0.
 
-   - **`time_grain`**
-     - Description: The time grain at which the budget is tracked (e.g., "Monthly", "Quarterly").
-     - Type: `string`
-     - Validation: Must be one of ["Monthly", "Quarterly", "Annually"].
+- **`time_grain`**
+  - **Description**: The time covered by the budget. Must be one of `BillingAnnual`, `BillingMonth`, `BillingQuarter`, `Annually`, `Monthly`, `Quarterly`.
+  - **Type**: `string`
+  - **Default**: `Monthly`
+  - **Validation**: Must be one of `BillingAnnual`, `BillingMonth`, `BillingQuarter`, `Annually`, `Monthly`, `Quarterly`.
 
-   - **`start_date`**
-     - Description: The start date for the budget tracking in the format `YYYY-MM-DD`.
-     - Type: `string`
-     - Validation: Must be a valid date string.
+- **`time_period`**
+  - **Description**: The time period for the budget, including `start_date` and `end_date`. The `start_date` must be the first of the month, on or after June 1, 2017, and not more than 12 months in the future.
+  - **Type**: `object`
+    - **Attributes**:
+      - **`start_date`**: `string`
+      - **`end_date`**: `optional(string, "")`
+  - **Validation**:
+    - The `start_date` must be the first of the month in the format `YYYY-MM-01T00:00:00Z`.
+    - The `start_date` must be on or after June 1, 2017.
+    - The `start_date` must not be more than 12 months in the future.
+    - If `end_date` is provided, it must be greater than the `start_date`.
+    - If `end_date` is not set, the default end date is approximately 10 years from the `start_date`.
 
-   - **`end_date`**
-     - Description: The end date for the budget tracking in the format `YYYY-MM-DD`.
-     - Type: `string`
-     - Validation: Optional. If not provided, the budget will continue indefinitely.
-
-   - **`notifications_enabled`**
-     - Description: Whether notifications for budget thresholds are enabled.
-     - Type: `bool`
-     - Default: `true`.
-
-   - **`thresholds`**
-     - Description: A list of thresholds (as percentages) that trigger budget notifications.
-     - Type: `list(number)`
-     - Validation: Must be a list of numbers between 0 and 100.
-     
-   - **`contact_emails`**
-     - Description: A list of email addresses to receive budget notifications.
-     - Type: `list(string)`
-     - Validation: Must be a list of valid email addresses.
