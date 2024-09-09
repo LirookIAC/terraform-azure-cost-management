@@ -99,5 +99,40 @@ To use this module, follow these steps:
     - **Threshold**: Must be between `0` and `1000`.
     - **Threshold Type**: Must be one of `Actual` or `Forecasted`.
     - **Contact Details**: At least one of `contact_emails`, `contact_groups`, or `contact_roles` must be provided.
+- **`dimensions`**
+  - **Description**: A list of dimension filters to apply to the budget.
+  - **Type**: `list(object({`
+    - **`name`**: `string`
+    - **`operator`**: `optional(string, "In")`  # Default value is "In"
+    - **`values`**: `list(string)`
+  - **Default**: 
+    ```hcl
+    [ 
+      {
+        name   = "ResourceId",
+        values = ["unused_default_value"]
+      } 
+    ]
+    ```
+  - **Validation**:
+    - **Name**: Each dimension's name must be one of the allowed values: `ChargeType`, `Frequency`, `InvoiceId`, `Meter`, `MeterCategory`, `MeterSubCategory`, `PartNumber`, `PricingModel`, `Product`, `ProductOrderId`, `ProductOrderName`, `PublisherType`, `ReservationId`, `ReservationName`, `ResourceGroupName`, `ResourceGuid`, `ResourceId`, `ResourceLocation`, `ResourceType`, `ServiceFamily`, `ServiceName`, `SubscriptionID`, `SubscriptionName`, `UnitOfMeasure`.
+    - **Values**: Each dimension must specify at least one value in the `values` list.
+
+- **`tags`**
+  - **Description**: A list of tag filters to apply to the budget.
+  - **Type**: `list(object({`
+    - **`name`**: `string`
+    - **`values`**: `list(string)`
+  - **Default**: 
+    ```hcl
+    [ 
+      {
+        name   = "unused_default_value",
+        values = ["unused_default_value"]
+      } 
+    ]
+    ```
+  - **Validation**:
+    - **Values**: Each tag filter must specify at least one value in the `values` list.
 
 
