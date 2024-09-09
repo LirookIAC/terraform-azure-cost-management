@@ -135,4 +135,58 @@ To use this module, follow these steps:
   - **Validation**:
     - **Values**: Each tag filter must specify at least one value in the `values` list.
 
+## Example Usage
+
+Below is an example of how to use the `azure-cost-management` module:
+
+```hcl
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+module "azure_cost_management" {
+  source = "git::https://github.com/LirookIAC/terraform-azure-cost-management.git"
+  
+  # Required Variables
+  resource_group_id          = "/subscriptions/bed9c8b2-bb60-492d-92a9-d1641fb7adf8/resourceGroups/azureInfra"
+  resource_group_budget_name = "azureInfra-budget"
+  amount                     = 100
+  time_period = {
+    start_date = "2024-10-01T00:00:00Z"
+  }
+
+  # Optional Variables
+  notifications = [
+    {
+      operator        = "GreaterThan"
+      threshold       = 100
+      contact_emails  = ["test@myself.com"]
+    }
+  ]
+
+  dimensions = [
+    {
+      name   = "ResourceId"
+      values = ["/subscriptions/bed9c8b2-bb60-492d-92a9-d1641fb7adf8/resourceGroups/azureInfra/providers/Microsoft.RecoveryServices/vaults/lirrokVault"]
+    }
+  ]
+
+  tags = [
+    {
+      name   = "foo"
+      values = ["bar"]
+    }
+  ]
+}
+```
+
 
