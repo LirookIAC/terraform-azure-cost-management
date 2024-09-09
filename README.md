@@ -50,20 +50,20 @@ To use this module, follow these steps:
 
    Configure the following variables to tailor the budget resource to your needs:
 
-   - **`resource_group_budget_name`**
-     - Description: The name of the Resource Group Consumption Budget.
-     - Type: `string`
-     - Validation: Must not be empty.
+- **`resource_group_budget_name`**
+  - **Description**: The name of the Resource Group Consumption Budget.
+  - **Type**: `string`
+  - **Validation**: Must not be empty.
 
-   - **`resource_group_id`**
-     - Description: The ID of the Resource Group in the form of `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resourceGroup1`.
-     - Type: `string`
-     - Validation: Must be in the correct format `/subscriptions/{subscription-id}/resourceGroups/{resourceGroup}`.
+- **`resource_group_id`**
+  - **Description**: The ID of the Resource Group in the form of `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resourceGroup1`.
+  - **Type**: `string`
+  - **Validation**: Must be in the correct format `/subscriptions/{subscription-id}/resourceGroups/{resourceGroup}`.
 
-   - **`amount`**
-     - Description: The total amount of cost to track with the budget.
-     - Type: `number`
-     - Validation: Must be greater than 0.
+- **`amount`**
+  - **Description**: The total amount of cost to track with the budget.
+  - **Type**: `number`
+  - **Validation**: Must be greater than 0.
 
 - **`time_grain`**
   - **Description**: The time covered by the budget. Must be one of `BillingAnnual`, `BillingMonth`, `BillingQuarter`, `Annually`, `Monthly`, `Quarterly`.
