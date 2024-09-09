@@ -153,7 +153,7 @@ To use this module, follow these steps:
    - The `dimensions` and `tags` parameters can significantly impact the budget scope. Be mindful of the filters applied to ensure they accurately reflect the intended scope of your budget.
 
 6. **Default Values:**
-   - Default values for dimensions and tags are just placeholders to pass validations. If no dimensions and tag bloks ae declared, no filters are applied.
+   - Default values for dimensions and tags are just placeholders to pass validations. If no dimensions and tag blocks ae declared, no filters will be applied.
 
 
 ## Example Usage
